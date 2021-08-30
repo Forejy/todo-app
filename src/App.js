@@ -30,18 +30,21 @@ class TodoList extends React.Component {
     }
   }
 
-  handleClickDelete(i) { //TODO: Je delete la task, qu'est-ce qu'il reste dans le Buffer ?
-    const temp = this.state.tasks.slice();
-    temp.splice(i, 1);
+  handleClickDelete(i) {
+    const tasks = this.state.tasks.slice();
+    const tasksBuffer = this.state.tasksBuffer.slice();
+    tasks.splice(i, 1);
+    tasksBuffer.splice(i, 1);
 
     this.setState({
-      tasks: temp,
+      tasks: tasks,
+      tasksBuffer: tasksBuffer,
     })
   }
 
   handleClickEdit(i) {
     let tasks = this.state.tasks.slice();
-    tasks[i] = { text: tasks[i].text, edit: true }; //TODO: réécrire -> task[i].edit = true ?
+    tasks[i].edit= true; //TODO: réécrire -> task[i].edit = true ?
 
     this.setState({
       tasks: tasks,
@@ -61,13 +64,19 @@ class TodoList extends React.Component {
   handleSubmitEdit = (i, e) => {
     e.preventDefault();
 
-    const tasks = this.state.tasks.slice();
     const tasksBuffer = this.state.tasksBuffer.slice();
-    tasks[i] = { text: tasksBuffer[i], edit: false } ;
+    if (tasksBuffer[i] !== '') {
+      const tasks = this.state.tasks.slice();
+      tasks[i] = { text: tasksBuffer[i], edit: false } ;
 
-    this.setState({
-      tasks: tasks,
-    })
+      this.setState({
+        tasks: tasks,
+      })
+
+      return true;
+    }
+
+    else return false;
   }
 
   handleCancelEdit = (i) => {
@@ -93,6 +102,7 @@ class TodoList extends React.Component {
             id="taskInput"
             value={ task.text }
             onChange={ this.handleChange }
+            autoFocus
           />
           <button type="submit">
             Envoyer

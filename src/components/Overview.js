@@ -1,6 +1,7 @@
 import React from 'react';
 
 class Overview extends React.Component {
+
   renderTask(task, i) {
     let deletePart = <span onClick={ () => this.props.onClickDelete(i) }>  X</span>
     let ret;
@@ -12,6 +13,7 @@ class Overview extends React.Component {
               type="text"
               value={ this.props.tasksBuffer[i] }
               onChange={ (e) => this.props.onChange(i, e) }
+              autoFocus
             />
             <button type="submit">
               Envoyer
@@ -20,6 +22,7 @@ class Overview extends React.Component {
               Annuler
             </button>
           </form>
+          {deletePart}
         </li>
     }
     else {
